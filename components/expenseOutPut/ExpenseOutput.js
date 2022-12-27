@@ -3,6 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { GlobalStyles } from "../../contants/styles";
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
+import { useSelector } from "react-redux";
+
 
 const DummyExpenses = [
   {
@@ -44,10 +46,10 @@ const DummyExpenses = [
 ];
 
 const ExpenseOutput = ({ expenses, expensePeriod }) => {
-  return (
+ return (
     <View style={styles.container}>
-      <ExpenseSummary expenses={DummyExpenses} periodName={expensePeriod} />
-      <ExpenseList expenses={DummyExpenses} />
+      <ExpenseSummary expenses={expenses} periodName={expensePeriod} />
+      <ExpenseList expenses={expenses} />
     </View>
   );
 };

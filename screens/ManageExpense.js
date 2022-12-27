@@ -3,10 +3,20 @@ import { View, StyleSheet } from "react-native";
 import Button from "../components/ui/Button";
 import IconButton from "../components/ui/IconButton";
 import { GlobalStyles } from "../contants/styles";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addExpense,
+  deleteExpense,
+  updateExpense,
+} from "../store/expenseSlice";
+import ExpenseForm from "../components/manageExpense/ExpenseForm";
 
 const ManageExpense = ({ route, navigation }) => {
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
+
+  const expenses = useSelector((state) => state.expenses);
+  const dispatch = useDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -15,16 +25,37 @@ const ManageExpense = ({ route, navigation }) => {
   }, [isEditing, navigation]);
 
   const deleteItemHandler = () => {
+    console.log(expenses);
+    dispatch(deleteExpense({ id: editedExpenseId }));
     navigation.goBack();
   };
   const cancelHandler = () => {
     navigation.goBack();
   };
   const confirmHandler = () => {
+    if (isEditing) {
+      dispatch(
+        updateExpense({
+          id: editedExpenseId,
+          description: "test case update",
+          amount: 23.7,
+          date: new Date("2022-12-24"),
+        })
+      );
+    } else {
+      dispatch(
+        addExpense({
+          description: "test case add",
+          amount: 23.7,
+          date: new Date("2022-12-24"),
+        })
+      );
+    }
     navigation.goBack();
   };
   return (
     <View style={styles.container}>
+      <ExpenseForm />
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} mode="flat" onPress={cancelHandler}>
           Cancel

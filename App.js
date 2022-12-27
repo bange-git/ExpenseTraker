@@ -8,6 +8,8 @@ import RecentExpense from "./screens/RecentExpense";
 import { GlobalStyles } from "./contants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./components/ui/IconButton";
+import { Provider } from 'react-redux';
+import { store } from "./store/store";
 
 const Stack = createNativeStackNavigator();
 const BottomTaps = createBottomTabNavigator();
@@ -62,6 +64,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
+      <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -83,6 +86,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </Provider>
     </>
   );
 }
