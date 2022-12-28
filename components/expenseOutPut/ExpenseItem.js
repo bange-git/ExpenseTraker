@@ -4,19 +4,19 @@ import { GlobalStyles } from "../../contants/styles";
 import { getformattedDate } from "../../utils/date";
 import { useNavigation } from "@react-navigation/native";
 
-const ExpenseItem = ({id, description, date, amount }) => {
+const ExpenseItem = ({ id, description, date, amount }) => {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();
-
-    const expenseItemHandler = () => {
-      navigation.navigate('ManageExpense', {
-        expenseId: id
-      })
-    }
+  const expenseItemHandler = () => {
+    navigation.navigate("ManageExpense", {
+      expenseId: id,
+    });
+  };
 
   return (
-    <Pressable style={({pressed}) => pressed && styles.pressed}
-    onPress={expenseItemHandler}
+    <Pressable
+      style={({ pressed }) => pressed && styles.pressed}
+      onPress={expenseItemHandler}
     >
       <View style={styles.expenseItem}>
         <View>
@@ -34,9 +34,9 @@ const ExpenseItem = ({id, description, date, amount }) => {
 };
 
 const styles = StyleSheet.create({
-    pressed: {
-     opacity: 0.75
-    },
+  pressed: {
+    opacity: 0.75,
+  },
   expenseItem: {
     padding: 12,
     marginVertical: 8,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
-    minWidth: 80
+    minWidth: 80,
   },
   amount: {
     color: GlobalStyles.colors.primary500,

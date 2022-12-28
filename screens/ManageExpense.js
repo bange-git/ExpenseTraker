@@ -13,10 +13,15 @@ import ExpenseForm from "../components/manageExpense/ExpenseForm";
 
 const ManageExpense = ({ route, navigation }) => {
   const editedExpenseId = route.params?.expenseId;
+  console.log(editedExpenseId);
   const isEditing = !!editedExpenseId;
 
   const expenses = useSelector((state) => state.expenses);
   const dispatch = useDispatch();
+
+  const selectedExpense = expenses.find(
+    (expense) => expense.id === editedExpenseId
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,38 +37,28 @@ const ManageExpense = ({ route, navigation }) => {
   const cancelHandler = () => {
     navigation.goBack();
   };
-  const confirmHandler = () => {
+  const confirmHandler = (expenseData) => {
+    let { amount, date, description } = expenseData;
     if (isEditing) {
+      //id = editedExpenseId;
       dispatch(
-        updateExpense({
-          id: editedExpenseId,
-          description: "test case update",
-          amount: 23.7,
-          date: new Date("2022-12-24"),
-        })
+        updateExpense({ id: editedExpenseId, amount, date, description })
       );
     } else {
       dispatch(
-        addExpense({
-          description: "test case add",
-          amount: 23.7,
-          date: new Date("2022-12-24"),
-        })
+        addExpense({ id: Math.random().toString(), amount, date, description })
       );
     }
     navigation.goBack();
   };
   return (
     <View style={styles.container}>
-      <ExpenseForm />
-      <View style={styles.buttonsContainer}>
-        <Button style={styles.button} mode="flat" onPress={cancelHandler}>
-          Cancel
-        </Button>
-        <Button style={styles.button} onPress={confirmHandler}>
-          {isEditing ? "update" : "add"}
-        </Button>
-      </View>
+      <ExpenseForm
+        onCancel={cancelHandler}
+        submitButtonLabel={isEditing ? "update" : "add"}
+        onSubmit={confirmHandler}
+        defaultValue={selectedExpense}
+      />
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -90,15 +85,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8,
   },
 });
 
